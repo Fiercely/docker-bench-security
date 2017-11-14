@@ -39,9 +39,9 @@ Note that when distributions doesn't contain `auditctl`, the audit tests will
 check `/etc/audit/audit.rules` to see if a rule is present instead.
 
 Distribution specific Dockerfiles that fixes this issue are available in the
-[distros directory](https://github.com/docker/docker-bench-security/tree/master/distros).
+[distros directory](https://github.com/fiercely/docker-bench-security/tree/master/distros).
 
-The [distribution specific Dockerfiles](https://github.com/docker/docker-bench-security/tree/master/distros)
+The [distribution specific Dockerfiles](https://github.com/fiercely/docker-bench-security/tree/master/distros)
 may also help if the distribution you're using haven't yet shipped Docker
 version 1.10.0 or later.
 
@@ -51,7 +51,7 @@ If you wish to build and run this container yourself, you can follow the
 following steps:
 
 ```sh
-git clone https://github.com/docker/docker-bench-security.git
+git clone https://github.com/fiercely/docker-bench-security.git
 cd docker-bench-security
 docker build -t docker-bench-security .
 docker run -it --net host --pid host --cap-add audit_control \
@@ -66,15 +66,38 @@ docker run -it --net host --pid host --cap-add audit_control \
 or use [Docker Compose](https://docs.docker.com/compose/):
 
 ```sh
-git clone https://github.com/docker/docker-bench-security.git
+git clone https://github.com/fiercely/docker-bench-security.git
 cd docker-bench-security
 docker-compose run --rm docker-bench-security
+```
+## Running in Armhf ( 32 bit V7) 
+
+If you wish to build and run this container yourself, you can follow the
+following steps:
+
+```sh
+docker build -t docker-bench-security-armhf --file Dockerfile-armhf .
+docker run -it --net host --pid host --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /var/lib:/var/lib \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/lib/systemd:/usr/lib/systemd \
+    -v /etc:/etc --label docker_bench_security \
+    docker-bench-security-armhf
+```
+
+or use [Docker Compose](https://docs.docker.com/compose/):
+
+```sh
+git clone https://github.com/fiercely/docker-bench-security.git
+cd docker-bench-security
+docker-compose -f docker-compose.armhf.yml run --rm docker-bench-security
 ```
 
 Also, this script can also be simply run from your base host by running:
 
 ```sh
-git clone https://github.com/docker/docker-bench-security.git
+git clone https://github.com/fiercely/docker-bench-security.git
 cd docker-bench-security
 sudo sh docker-bench-security.sh
 ```
